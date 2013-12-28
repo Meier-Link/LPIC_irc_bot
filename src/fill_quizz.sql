@@ -1,0 +1,11 @@
+-- --------------------------------------------------------------
+-- fill_quizz.sql
+-- Used to fill 'question' table
+-- Use the following form for your insert clauses:
+-- INSERT question (q_quest, q_ans_a, q_ans_b, q_ans_c, q_ans_d, q_right_ans) VALUES ('<question>', '<answer a>', '<answer b>', '<answer c>', '<answer d>', '<list of right answers>');
+-- IMPORTANT:
+--  - Do not forget to escape simple quotes in strings ;
+--  - for the right answers, list letters without spaces (example: 'ab', or 'acd')
+--  - Each time I'll execute the script, I'll comment insert clauses runed
+-- And very important : sorry for my bad english :o)
+-- --------------------------------------------------------------
