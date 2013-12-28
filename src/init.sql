@@ -1,0 +1,14 @@
+CREATE  TABLE IF NOT EXISTS user
+  (u_id INTEGER PRIMARY KEY AUTOINCREMENT ,
+  u_pseudo VARCHAR(255) NOT NULL ,
+  u_start DATETIME NOT NULL ,
+  u_score INTEGER );
+
+CREATE  TABLE IF NOT EXISTS question
+  (q_id INTEGER PRIMARY KEY AUTOINCREMENT ,
+  q_quest TEXT NULL ,
+  q_ans_a TEXT NULL ,
+  q_ans_b TEXT NULL ,
+  q_ans_c TEXT NULL ,
+  q_ans_d TEXT NULL ,
+  q_right_ans VARCHAR(4) NULL );
