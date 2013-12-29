@@ -1,12 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Copyright 2010 Jérémie Balagna-Ranin <jeremie.balagna@autistici.org>
+# LPIC_Bot.py
+#   A bot to run LPIC quizz on your favorite irc chat
+#
+# This is free and unencumbered software released into the public domain.
+# See LICENCE file for more information
+
 import sqlite3
 import irclib
 import ircbot
 
 import time
-from random import randrange, randint
+from random import randrange, randint, sample
+from unicodedata import normalize
 from datetime import datetime
 
 class LPIC_Bot(ircbot.SingleServerIRCBot):
@@ -15,7 +23,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     self.CHAN = '#lpic-fr'
     self.DB_NAME = 'lpic_quizz.db'
     self.DB_QUIZZ_TABLE  = 'question'
-    self.DB_QUIZZ_FIELDS = ['q_id', 'q_quest', 'q_ans_a', 'q_ans_b', 'q_ans_c', 'q_ans_d', 'q_right_ans']
+    self.DB_QUIZZ_FIELDS = ['q_id', 'q_lvl', 'q_quest', 'q_ans_a', 'q_ans_b', 'q_ans_c', 'q_ans_d', 'q_right_ans']
     self.quizz_size = None
     self.DB_USER_TABLE   = 'user'
     self.DB_USER_FIELDS  = ['u_id', 'u_pseudo', 'u_start', 'u_score']
@@ -26,18 +34,17 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     self.cmds = {
       'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
       'score': "Pour afficher le score d'une personne. Tu peux afficher le score pour plusieurs personnes en listant leur pseudo",
-      'start': "Ça, c'est pour me demander de poser une question",
+      'start': "Ça, c'est pour me demander de poser une question. Vous pouvez passer '101', '102', ... en paramètre pour filtrer les questions par niveau",
       'test':  "Tu penses avoir la réponse ? Rajoutes-la après cette commande (s'il y en a plusieurs, ne met pas d'espace)",
       'answer': """T'en a marre de chercher (ou t'es un gros flemmard ... Ce qui revient au même), cette commande te permettra de connaître la réponse"""}
     self.current = None
   
   ### DB specific methods ###
-  def db_get_quizz_size(self):
-    if self.quizz_size is None:
-      query = "SELECT COUNT(*) FROM " + self.DB_QUIZZ_TABLE
-      self.cu.execute(query)
-      self.quizz_size = self.cu.fetchone()[0]
-    return self.quizz_size
+  def convert(self, i):
+    if isinstance(i, int):
+      return i
+    else:
+      return normalize('NFKD', i).encode('ascii', 'ignore')
   
   def db_insert(self, query):
     self.cu.execute(query)
@@ -74,15 +81,20 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       self.cu.execute(query, (u_pseudo, datetime.now().strftime('%Y-%m-%d %X'), 1))
     self.co.commit()
   
-  def db_select_random(self):
-    # get random value in db
-    if self.db_get_quizz_size() < 1: return None
-    tgt_id = randint(1, self.db_get_quizz_size())
-    query = "SELECT " + ', '.join(self.DB_QUIZZ_FIELDS) + " FROM " + self.DB_QUIZZ_TABLE + " WHERE q_id=?"
-    self.cu.execute(query, (tgt_id,))
-    r = self.cu.fetchone()
+  def db_select_random(self, lvl=False):
+    if lvl:
+      query = "SELECT q_id, l_name, q_quest, q_ans_a, q_ans_b, q_ans_c, q_ans_d, q_right_ans FROM question INNER JOIN level ON q_lvl == l_id AND l_name == ?;"
+      self.cu.execute(query, (lvl,))
+    else:
+      query = "SELECT q_id, l_name, q_quest, q_ans_a, q_ans_b, q_ans_c, q_ans_d, q_right_ans FROM question INNER JOIN level ON q_lvl == l_id;"
+      self.cu.execute(query)
+    rows = self.cu.fetchall()
+    if (len(rows) < 1): return None
+    r = sample(rows, 1)[0]
     if r is not None:
-      return {'q': r['q_quest'], 'a': r['q_ans_a'], 'b': r['q_ans_b'], 'c': r['q_ans_c'], 'd': r['q_ans_d'], 'r': r['q_right_ans']}
+      r = [self.convert(i) for i in r]
+      print r
+      return {'lvl': r[1], 'q': r[2], 'a': r[3], 'b': r[4], 'c': r[5], 'd': r[6], 'r': r[7]}
     else:
       return None
   
@@ -99,7 +111,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       for k in self.cmds.keys():
         serv.privmsg(canal, k + ': ' + self.cmds[k])
   
-  def check_answer(u, a):
+  def check_answer(self, u, a):
     if a == self.current['r']:
       self.current = None
       self.db_upgrade_user(u)
@@ -119,22 +131,27 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     print auteur + canal + ' : ' + arg1 + '\n'
     
     args = arg1.split(" ")
-    nombreArg = len(args)
-    if args[0][0] == '!':
-      cmd = args[0][1:]
+    if len(args) > 1:
       params = [args[i] for i in range(1, len(args)-1)]
+    else:
+      params = []
+    if args[0][0] == '!':
+      print('args: ' + str(len(args)))
+      cmd = args[0][1:]
       if cmd in self.cmds.keys():
         # Display help
         if cmd == 'help':
           self.usage(serv, canal, params)
         # Start a new quizz
         elif cmd == 'start':
-          if self.current is None: self.current = self.db_select_random()
+          lvl = False
+          if len(args) > 1: lvl = args[1]
+          if self.current is None: self.current = self.db_select_random(lvl)
           else: serv.privmsg(canal, "Vous avez déjà demandé une question (" + auteur + ", spice de boulet !)")
           if self.current is None:
-            serv.privmsg(canal, "Aucune question n'est disponible ! Faudra penser à alimenter la bdd ...")
+            serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
           else:
-            serv.privmsg(canal, "Voici la question : " + self.current['q'])
+            serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
             serv.privmsg(canal, "Réponse a : " + self.current['a'])
             serv.privmsg(canal, "Réponse b : " + self.current['b'])
             serv.privmsg(canal, "Réponse c : " + self.current['c'])
@@ -142,18 +159,20 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
         # Check an answer
         elif cmd == 'test':
           if self.current is not None:
-            if self.check_answer(auteur, params[0]):
-              serv.privmsg(canal, "Bravo " + auteur + " ! C'était bien ça !")
-              serv.privmsg(canal, "Prêt pour une nouvelle question ?")
+            if (len(args) == 2):
+              if self.check_answer(auteur, args[1]):
+                serv.privmsg(canal, "Bravo " + auteur + " ! C'était bien ça !")
+                serv.privmsg(canal, "Prêt pour une nouvelle question ?")
+              else:
+                serv.privmsg(canal, "IOU LOUUSE ! Traille eugééne !")
             else:
-              serv.privmsg(canal, "IOU LOUUUSE ! Traille eugéééne !")
+              serv.privmsg(canal, "T'as le droit à une ET une seule réponse par tentative")
           else:
             serv.privmsg(canal, "Non mais t'es sérieux là ? Tu ne m'a pas encore posé de question -_-'")
         # Send the right answer (and reset quizz)
         elif cmd == 'answer':
           if self.current is not None:
-            serv.privmsg(canal, "Kwaa ?! T'abandonne déjà ?! pffff ... Bon, bah la bonne réponse était :")
-            serv.privmsg(canal, self.current['r'])
+            serv.privmsg(canal, "Kwa ?! T'abandonne déjà ?! pffff ... Bon, bah la bonne réponse était : " + self.current['r'])
             serv.privmsg(canal, "Prêt pour une nouvelle question ?")
             self.current = None
           else:
