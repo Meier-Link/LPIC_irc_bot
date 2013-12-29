@@ -7,8 +7,15 @@ CREATE  TABLE IF NOT EXISTS user
 CREATE  TABLE IF NOT EXISTS question
   (q_id INTEGER PRIMARY KEY AUTOINCREMENT ,
   q_quest TEXT NULL ,
+  q_lvl   INT NULL ,
   q_ans_a TEXT NULL ,
   q_ans_b TEXT NULL ,
   q_ans_c TEXT NULL ,
   q_ans_d TEXT NULL ,
   q_right_ans VARCHAR(4) NULL );
+
+CREATE TABLE IF NOT EXISTS level
+  (l_id INTEGER PRIMARY KEY AUTOINCREMENT ,
+  l_name INT NULL);
+
+INSERT INTO level (l_name) VALUES (101), (102), (201), (202), (301), (302), (303);
