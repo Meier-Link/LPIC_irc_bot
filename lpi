@@ -1,0 +1,47 @@
+q1
+Which of the following permissions have the SUID value set?
+	4755
+	2755
+	1755
+		The answer is 4755
+
+q2
+When typing at the shell, what character can be used to split a command across multiple lines.
+
+		 The \ character inserted at the end of a line indicates that the command continues to the next line. 
+q3
+What option on the tail command will cause it to keep displaying new lines as they are written to the file (e.g. when viewing current log files)?
+	-o
+	-r
+	-i
+	-l
+	-f
+		-f 
+q4
+Which of the following will run command2, only if command1 is successful.
+	command1 > command2
+	command1 & command2
+	command1 && command2
+	command1 | command2
+	command1 || command2
+		 The answer is command1 && command2. The > sign will cause command2 to be replaced with the output of command1. A single & will cause the first command to run in the background. The | is the or symbol, not the and symbol. 
+
+q5
+What umask value would ensure that, by default, new files and directories created would not give any permissions except to the owner?
+
+		 A umask of 0077 will ensure that, by default, only the owner has permissions for any newly created files and directories. 
+q6
+Which of the following is often used for the configuration of X11? 
+	/etc/X11/xorg.conf
+	/etc/X11/xorgConfig
+	/etc/X11/xconfiguration
+	/etc/Xconfig
+	/etc/X.conf
+		The correct answer is /etc/X11/xorg.conf (for X.org) 
+q7
+What is the octal value for the chmod command to set a file so that it can be read and written to by the owner, and read by the group and all other users? It should not be executable.
+		
+		 The required permissions are 644 
+q8
+
+
