@@ -25,7 +25,7 @@ alphabet = 'abcdefghijklmnopqrstuvwxyz'
 # r = self.cu.fetchone() || self.cu.fetchall()
 # r['<col_name>']
 class LPIC_DB:
-  def init(self):
+  def __init__(self):
     self.NAME         = 'lpic_quizz.db'
     self.QU_TABLE     = 'question'
     self.QU_FIELDS    = 'q_id, q_txt, q_lvl, q_lang'
@@ -37,7 +37,7 @@ class LPIC_DB:
     self.LNG_FIELDS   = 'la_id, la_short'
     self.U_TABLE      = 'user'
     self.U_FIELDS     = 'u_id, u_pseudo, u_start, u_score'
-    self.co = sqlite3.connect(self.DB_NAME)
+    self.co = sqlite3.connect(self.NAME)
     self.co.row_factory = sqlite3.Row
     self.cu = self.co.cursor()
   
@@ -88,27 +88,27 @@ class LPIC_DB:
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id AND la_short == ?;"
       self.cu.execute(query, (lvl, lng))
     elif lvl:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id AND l_name == ? " \
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND l_name == ? " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query, (lvl,))
     elif lng:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id " \
-        + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id AND la_short == ?;"
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id " \
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id AND la_short == ?;"
       self.cu.execute(query, (lng,))
     else:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id " \
-        + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id;"
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id " \
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query)
     rows = self.cu.fetchall()
     selected = sample(rows, 1)[0]
-    question = {'q': selected['q_txt'], 'lng': selected['la_short'], 'lvl': selected['le_name'], 'a': {}, 'r': ''}
+    question = {'q': self.convert(selected['q_txt']), 'lng': selected['la_short'], 'lvl': selected['le_name'], 'a': {}, 'r': ''}
     query = "SELECT " + self.AN_FIELDS + " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
     self.cu.execute(query, (selected['q_id'],))
     rows = self.cu.fetchall()
     cpt = 0
     for row in rows:
       if row['a_is_right']: question['r'] += alphabet[cpt]
-      question['a'][alphabet[cpt]] = row['a_txt']
+      question['a'][alphabet[cpt]] = self.convert(row['a_txt'])
       
       cpt += cpt
     return question
@@ -160,7 +160,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
     else:
       serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
-      for k in self.current.a.keys():
+      for k in self.current['a'].keys():
         serv.privmsg(canal, "Réponse " + k + " : " + self.current['a'][k])
   
   def on_welcome(self, serv, ev):
