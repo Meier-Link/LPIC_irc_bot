@@ -25,7 +25,7 @@ alphabet = 'abcdefghijklmnopqrstuvwxyz'
 # r = self.cu.fetchone() || self.cu.fetchall()
 # r['<col_name>']
 class LPIC_DB:
-  init(self):
+  def init(self):
     self.NAME         = 'lpic_quizz.db'
     self.QU_TABLE     = 'question'
     self.QU_FIELDS    = 'q_id, q_txt, q_lvl, q_lang'
@@ -84,25 +84,25 @@ class LPIC_DB:
   def select_random(self, lvl=False, lng=False):
     query = "SELECT " + self.QU_FIELDS + ", " + self.LVL_FIELDS + ", " + self.LNG_FIELDS + " FROM " + self.QU_TABLE 
     if lvl and lng:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND le_name == ? "
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND le_name == ? " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id AND la_short == ?;"
       self.cu.execute(query, (lvl, lng))
     elif lvl:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id AND l_name == ? "
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id AND l_name == ? " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query, (lvl,))
     elif lng:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id "
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id AND la_short == ?;"
       self.cu.execute(query, (lng,))
     else:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id "
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id;"
       self.cu.execute(query)
     rows = self.cu.fetchall()
     selected = sample(rows, 1)[0]
     question = {'q': selected['q_txt'], 'lng': selected['la_short'], 'lvl': selected['le_name'], 'a': {}, 'r': ''}
-    query = "SELECT " + self.AN_FIELDS " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
+    query = "SELECT " + self.AN_FIELDS + " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
     self.cu.execute(query, (selected['q_id'],))
     rows = self.cu.fetchall()
     cpt = 0
@@ -131,7 +131,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
   def get_question(self, lvl=False, lng=False):
     if self.current is None:
       self.current = self.db.select_random(lvl, lng)
-    elif lvl or lng
+    else:
       self.current = self.db.select_random(lvl, lng)
   
   def check_answer(self, u, a):
@@ -155,7 +155,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       for k in self.cmds.keys():
         serv.privmsg(canal, k + ': ' + self.cmds[k])
   
-  def display_question(self, serv, ev):
+  def display_question(self, serv, canal):
     if self.current is None:
       serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
     else:
@@ -192,14 +192,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
           if len(args) > 1: lvl = args[1]
           if self.current is None: self.current = self.db.select_random(lvl)
           else: serv.privmsg(canal, "Vous avez déjà demandé une question (" + auteur + ", spice de boulet !)")
-          if self.current is None:
-            serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
-          else:
-            serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
-            serv.privmsg(canal, "Réponse a : " + self.current['a'])
-            serv.privmsg(canal, "Réponse b : " + self.current['b'])
-            serv.privmsg(canal, "Réponse c : " + self.current['c'])
-            serv.privmsg(canal, "Réponse d : " + self.current['d'])
+          self.display_question(serv, canal)
         # Check an answer
         elif cmd == 'test':
           if self.current is not None:
