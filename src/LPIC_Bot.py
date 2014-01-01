@@ -17,45 +17,45 @@ from random import randrange, randint, sample
 from unicodedata import normalize
 from datetime import datetime
 
-class LPIC_Bot(ircbot.SingleServerIRCBot):
-  def __init__(self):
-    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC")
-    self.CHAN = '#lpic-fr'
-    self.DB_NAME = 'lpic_quizz.db'
-    self.DB_QUIZZ_TABLE  = 'question'
-    self.DB_QUIZZ_FIELDS = ['q_id', 'q_lvl', 'q_quest', 'q_ans_a', 'q_ans_b', 'q_ans_c', 'q_ans_d', 'q_right_ans']
-    self.quizz_size = None
-    self.DB_USER_TABLE   = 'user'
-    self.DB_USER_FIELDS  = ['u_id', 'u_pseudo', 'u_start', 'u_score']
+alphabet = 'abcdefghijklmnopqrstuvwxyz'
+
+# query = ...
+# params = (foo, bar, ...)
+# self.cu.execute(query, params)
+# r = self.cu.fetchone() || self.cu.fetchall()
+# r['<col_name>']
+class LPIC_DB:
+  init(self):
+    self.NAME         = 'lpic_quizz.db'
+    self.QU_TABLE     = 'question'
+    self.QU_FIELDS    = 'q_id, q_txt, q_lvl, q_lang'
+    self.AN_TABLE     = 'answer'
+    self.AN_FIELDS    = 'a_id, a_q_id, a_is_right, a_txt'
+    self.LVL_TABLE    = 'level'
+    self.LVL_FIELDS   = 'le_id, le_name'
+    self.LNG_TABLE    = 'lang'
+    self.LNG_FIELDS   = 'la_id, la_short'
+    self.U_TABLE      = 'user'
+    self.U_FIELDS     = 'u_id, u_pseudo, u_start, u_score'
     self.co = sqlite3.connect(self.DB_NAME)
     self.co.row_factory = sqlite3.Row
     self.cu = self.co.cursor()
-    self.whitelist = ["Meier_Link", "meier_link"]
-    self.cmds = {
-      'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
-      'score': "Pour afficher le score d'une personne. Tu peux afficher le score pour plusieurs personnes en listant leur pseudo",
-      'start': "Ça, c'est pour me demander de poser une question. Vous pouvez passer '101', '102', ... en paramètre pour filtrer les questions par niveau",
-      'test':  "Tu penses avoir la réponse ? Rajoutes-la après cette commande (s'il y en a plusieurs, ne met pas d'espace)",
-      'answer': """T'en a marre de chercher (ou t'es un gros flemmard ... Ce qui revient au même), cette commande te permettra de connaître la réponse"""}
-    self.current = None
   
-  ### DB specific methods ###
   def convert(self, i):
     if isinstance(i, int):
       return i
     else:
       return normalize('NFKD', i).encode('ascii', 'ignore')
   
-  def db_insert(self, query):
+  def insert(self, query):
     self.cu.execute(query)
     self.co.commit()
   
-  def db_get_score(self, u_pseudo):
+  def get_score(self, u_pseudo):
     # verify if user already exist
     if len(u_pseudo) > 255:
       u_pseudo = u_pseudo[:255]
-    query = "SELECT " + ', '.join(self.DB_USER_FIELDS) + " FROM " + self.DB_USER_TABLE + " WHERE u_pseudo=?"
-    print query + '; ' + u_pseudo
+    query = "SELECT " + self.U_FIELDS + " FROM " + self.U_TABLE + " WHERE u_pseudo=?"
     self.cu.execute(query, (u_pseudo,))
     r = self.cu.fetchone()
     if r is not None:
@@ -63,40 +63,84 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     else:
       return 0
   
-  def db_upgrade_user(self, u_pseudo):
+  def upgrade_user(self, u_pseudo):
     # verify if user already exist
     if len(u_pseudo) > 255:
       u_pseudo = u_pseudo[:255]
-    query = "SELECT " + ', '.join(self.DB_USER_FIELDS) + " FROM " + self.DB_USER_TABLE + " WHERE u_pseudo=?"
+    query = "SELECT " + self.U_FIELDS + " FROM " + self.U_TABLE + " WHERE u_pseudo=?"
     self.cu.execute(query, (u_pseudo,))
     r = self.cu.fetchone()
     if r is not None:
       r['u_score'] += 1
-      query = "UPDATE " + self.DB_USER_TABLE + " SET u_score=? WHERE u_pseudo=?"
+      query = "UPDATE " + self.U_TABLE + " SET u_score=? WHERE u_pseudo=?"
       self.cu.execute(query, (r['u_score'], u_pseudo))
     else:
-      tgt_fields = self.DB_USER_FIELDS
+      tgt_fields = self.U_FIELDS.split(', ')
       tgt_fields.remove('u_id')
-      query = """INSERT INTO """ + self.DB_USER_TABLE + """ (""" + ', '.join(tgt_fields) + """) VALUES (?, ?, ?);"""
+      query = """INSERT INTO """ + self.U_TABLE + """ (""" + ', '.join(tgt_fields) + """) VALUES (?, ?, ?);"""
       self.cu.execute(query, (u_pseudo, datetime.now().strftime('%Y-%m-%d %X'), 1))
     self.co.commit()
   
-  def db_select_random(self, lvl=False):
-    if lvl:
-      query = "SELECT q_id, l_name, q_quest, q_ans_a, q_ans_b, q_ans_c, q_ans_d, q_right_ans FROM question INNER JOIN level ON q_lvl == l_id AND l_name == ?;"
+  def select_random(self, lvl=False, lng=False):
+    query = "SELECT " + self.QU_FIELDS + ", " + self.LVL_FIELDS + ", " + self.LNG_FIELDS + " FROM " + self.QU_TABLE 
+    if lvl and lng:
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND le_name == ? "
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id AND la_short == ?;"
+      self.cu.execute(query, (lvl, lng))
+    elif lvl:
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id AND l_name == ? "
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query, (lvl,))
+    elif lng:
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id "
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id AND la_short == ?;"
+      self.cu.execute(query, (lng,))
     else:
-      query = "SELECT q_id, l_name, q_quest, q_ans_a, q_ans_b, q_ans_c, q_ans_d, q_right_ans FROM question INNER JOIN level ON q_lvl == l_id;"
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == l_id "
+        + " INNER JOIN " + self.LNG_TABLE + " ON q_lng == la_id;"
       self.cu.execute(query)
     rows = self.cu.fetchall()
-    if (len(rows) < 1): return None
-    r = sample(rows, 1)[0]
-    if r is not None:
-      r = [self.convert(i) for i in r]
-      print r
-      return {'lvl': r[1], 'q': r[2], 'a': r[3], 'b': r[4], 'c': r[5], 'd': r[6], 'r': r[7]}
+    selected = sample(rows, 1)[0]
+    question = {'q': selected['q_txt'], 'lng': selected['la_short'], 'lvl': selected['le_name'], 'a': {}, 'r': ''}
+    query = "SELECT " + self.AN_FIELDS " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
+    self.cu.execute(query, (selected['q_id'],))
+    rows = self.cu.fetchall()
+    cpt = 0
+    for row in rows:
+      if row['a_is_right']: question['r'] += alphabet[cpt]
+      question['a'][alphabet[cpt]] = row['a_txt']
+      
+      cpt += cpt
+    return question
+
+
+class LPIC_Bot(ircbot.SingleServerIRCBot):
+  def __init__(self):
+    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC")
+    self.CHAN = '#lpic-fr'
+    self.whitelist = ["Meier_Link", "meier_link"]
+    self.cmds = {
+      'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
+      'score': "Pour afficher le score d'une personne. Tu peux afficher le score pour plusieurs personnes en listant leur pseudo",
+      'start': "Ça, c'est pour me demander de poser une question. Vous pouvez passer '101', '102', ... en paramètre pour filtrer les questions par niveau",
+      'test':  "Tu penses avoir la réponse ? Rajoutes-la après cette commande (s'il y en a plusieurs, ne met pas d'espace)",
+      'answer': """T'en a marre de chercher (ou t'es un gros flemmard ... Ce qui revient au même), cette commande te permettra de connaître la réponse"""}
+    self.db = LPIC_DB()
+    self.current = None
+  
+  def get_question(self, lvl=False, lng=False):
+    if self.current is None:
+      self.current = self.db.select_random(lvl, lng)
+    elif lvl or lng
+      self.current = self.db.select_random(lvl, lng)
+  
+  def check_answer(self, u, a):
+    if a == self.current['r']:
+      self.current = None
+      self.db.upgrade_user(u)
+      return True
     else:
-      return None
+      return False
   
   def usage(self, serv, canal, params):
     serv.privmsg(canal, 'Usage: !<cmd> [param [param [...]]]')
@@ -111,13 +155,13 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       for k in self.cmds.keys():
         serv.privmsg(canal, k + ': ' + self.cmds[k])
   
-  def check_answer(self, u, a):
-    if a == self.current['r']:
-      self.current = None
-      self.db_upgrade_user(u)
-      return True
+  def display_question(self, serv, ev):
+    if self.current is None:
+      serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
     else:
-      return False
+      serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
+      for k in self.current.a.keys():
+        serv.privmsg(canal, "Réponse " + k + " : " + self.current['a'][k])
   
   def on_welcome(self, serv, ev):
     canal = ev.target()
@@ -146,7 +190,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
         elif cmd == 'start':
           lvl = False
           if len(args) > 1: lvl = args[1]
-          if self.current is None: self.current = self.db_select_random(lvl)
+          if self.current is None: self.current = self.db.select_random(lvl)
           else: serv.privmsg(canal, "Vous avez déjà demandé une question (" + auteur + ", spice de boulet !)")
           if self.current is None:
             serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
@@ -181,18 +225,18 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
           if len(params) > 0:
             to_display = 'Scores : '
             for pseudo in params:
-              score = self.db_get_score(pseudo)
+              score = self.db.get_score(pseudo)
               to_display += pseudo + "=" + str(score) + '; '
             serv.privmsg(canal, to_display)
           else:
-            score = self.db_get_score(auteur)
+            score = self.db.get_score(auteur)
             serv.privmsg(canal, auteur + ": " + str(score))
   
   def on_action(self, serv, ev):
     pass
   
   def on_kick(self, serv, ev):
-    serv.join("self.CHAN")
+    serv.join(self.CHAN)
     serv.action(canal, "Bah non. Tu peux pas me sortir (non mais croyait quoi, l'aut' !)")
     
 if __name__ == "__main__":
