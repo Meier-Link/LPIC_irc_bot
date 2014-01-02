@@ -29,7 +29,7 @@
 
 --INSERT INTO question (q_txt, q_lvl, q_lang) VALUES 
 --("When typing at the shell, what character can be used to split a command across multiple lines ?", 1, 2);
---INSERT INTO answer (a_q_id, a_is_right, a_txt) VALUES (3, 0, "&"), (3, 1, "\\"), (3, 0, "/");
+--INSERT INTO answer (a_q_id, a_is_right, a_txt) VALUES (3, 0, "&"), (3, 1, "\"), (3, 0, "/");
 
 --INSERT INTO question (q_txt, q_lvl, q_lang) VALUES 
 --("What option on the tail command will cause it to keep displaying new lines as they are written to the file (e.g. when viewing current log files) ?", 1, 2);
