@@ -71,9 +71,9 @@ class LPIC_DB:
     self.cu.execute(query, (u_pseudo,))
     r = self.cu.fetchone()
     if r is not None:
-      r['u_score'] += 1
+      new_score = r['u_score'] + 1
       query = "UPDATE " + self.U_TABLE + " SET u_score=? WHERE u_pseudo=?"
-      self.cu.execute(query, (r['u_score'], u_pseudo))
+      self.cu.execute(query, (new_score, u_pseudo))
     else:
       tgt_fields = self.U_FIELDS.split(', ')
       tgt_fields.remove('u_id')
