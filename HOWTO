@@ -28,3 +28,43 @@ The easiest way to use the bot consist to run the following command :
 
 Of course, you can use alternate ways like a daemon to run this script in background.
 
+Memo "howto" run a script as a service:
+~# cp /path/to/script /usr/sbin/script
+~# cp /etc/init.d/skeleton /etc/init.d/script
+~# vim /etc/init.d/script
+PATH=/usr/sbin:/usr/bin:/sbin:/bin
+DESC="Description of the service"
+NAME=script                         # from /usr/sbin
+DAEMON=/usr/sbin/$NAME
+DAEMON_ARGS="--options args"        # leave empty if script doesn't use args
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+        # Return
+        #   0 if daemon has been started
+        #   1 if daemon was already running
+        #   2 if daemon could not be started
+        start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+                || return 1
+        start-stop-daemon --start --quiet --background --make-pidfile --pidfile $PIDFILE --exec $DAEMON -- \
+                $DAEMON_ARGS \
+                || return 2
+        # Add code here, if necessary, that waits for the process to be ready
+        # to handle requests from services started subsequently which depend
+        # on this one.  As a last resort, sleep for some time.
+}
+~# update-rc.d script defaults 99
+~# /etc/init.d/script start
+
+To remove a service :
+~# /etc/init.d/script stop
+~# update-rc.d -f script remove
+~# rm /etc/init.d/script
+~# rm /usr/bin/script
+~# rm -r /opt/script
+
