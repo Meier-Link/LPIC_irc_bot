@@ -109,8 +109,7 @@ class LPIC_DB:
     for row in rows:
       if row['a_is_right']: question['r'] += alphabet[cpt]
       question['a'][alphabet[cpt]] = self.convert(row['a_txt'])
-      
-      cpt += cpt
+      cpt += 1
     return question
 
 
