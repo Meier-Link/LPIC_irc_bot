@@ -1,0 +1,30 @@
+    == LPIC_irc_Bot HOWTO ==
+
+Author:       Meier_Link
+Description:  Explain shortly how to use this bot
+Date:         2014-01-02 14:30
+
+  REQUIRED
+
+- python-irclib;
+- sqlite3.
+
+  INSTALLATION
+
+Before using, you have to create database file.
+Go to the install destination directory, and run the following commands :
+cp /path/to/download/dir/src/* ./
+~$ sqlite3 --init init.sql lpic_quizz.db
+sqlite3> .exit
+~$ sqlite3 --init fill_quizz.sql lpic_quizz.db
+sqlite3> .exit
+~$ chmod +x LPIC_Bot.py
+Do not forget to uncomment insert clauses before using fill_quizz.sql !
+
+  USAGE
+
+The easiest way to use the bot consist to run the following command :
+~$ ./LPIC_Bot.py
+
+Of course, you can use alternate ways like a daemon to run this script in background.
+
