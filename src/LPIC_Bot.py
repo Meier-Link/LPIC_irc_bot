@@ -88,7 +88,7 @@ class LPIC_DB:
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id AND la_short == ?;"
       self.cu.execute(query, (lvl, lng))
     elif lvl:
-      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND l_name == ? " \
+      query += " INNER JOIN " + self.LVL_TABLE + " ON q_lvl == le_id AND le_name == ? " \
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query, (lvl,))
     elif lng:
