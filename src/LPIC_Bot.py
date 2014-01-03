@@ -159,7 +159,9 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
     else:
       serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
-      for k in self.current['a'].keys():
+      keys = self.current['a'].keys()
+      keys.sort()
+      for k in keys:
         serv.privmsg(canal, "Réponse " + k + " : " + self.current['a'][k])
   
   def on_welcome(self, serv, ev):
@@ -175,7 +177,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     
     args = arg1.split(" ")
     if len(args) > 1:
-      params = [args[i] for i in range(1, len(args)-1)]
+      params = [args[i] for i in range(1, len(args))]
     else:
       params = []
     if args[0][0] == '!':
