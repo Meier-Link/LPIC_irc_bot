@@ -100,7 +100,13 @@ class LPIC_DB:
         + " INNER JOIN " + self.LNG_TABLE + " ON q_lang == la_id;"
       self.cu.execute(query)
     rows = self.cu.fetchall()
-    selected = sample(rows, 1)[0]
+    selected = []
+    if (len(rows) == 0):
+      return None
+    elif (len(rows) == 1):
+      selected = rows[0]
+    else:
+      selected = sample(rows, 1)[0]
     question = {'q': self.convert(selected['q_txt']), 'lng': selected['la_short'], 'lvl': selected['le_name'], 'a': {}, 'r': ''}
     query = "SELECT " + self.AN_FIELDS + " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
     self.cu.execute(query, (selected['q_id'],))
