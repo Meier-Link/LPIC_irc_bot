@@ -172,7 +172,8 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
   def on_pubmsg(self, serv, ev):
     auteur = irclib.nm_to_n(ev.source())
     canal = ev.target()
-    arg1 = ev.arguments()[0].lower()
+    #arg1 = ev.arguments()[0].lower()
+    arg1 = ev.arguments()[0]
     print auteur + canal + ' : ' + arg1 + '\n'
     
     args = arg1.split(" ")
