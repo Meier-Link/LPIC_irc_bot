@@ -206,7 +206,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
         if cmd == 'help':
           self.usage(serv, canal, params)
         elif cmd == 'count':
-          cnt = db.count_questions()
+          cnt = self.db.count_questions()
           serv.privmsg(canal, "Pour le moment, on a " + cnt + " questions a vous proposer.")
         # Start a new quizz
         elif cmd == 'start':
