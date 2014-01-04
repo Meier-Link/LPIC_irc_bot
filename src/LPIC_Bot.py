@@ -201,7 +201,6 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     
     auteur = irclib.nm_to_n(ev.source())
     canal = ev.target()
-    print canal
     #arg1 = ev.arguments()[0].lower()
     arg1 = ev.arguments()[0]
     print auteur + canal + ' : ' + arg1 + '\n'
