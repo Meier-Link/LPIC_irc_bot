@@ -13,6 +13,8 @@ import irclib
 import ircbot
 
 import time
+import signal
+import sys
 from random import randrange, randint, sample
 from unicodedata import normalize
 from datetime import datetime
@@ -143,6 +145,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       'answer': """T'en a marre de chercher (ou t'es un gros flemmard ... Ce qui revient au même), cette commande te permettra de connaître la réponse"""}
     self.db = LPIC_DB()
     self.current = None
+    self.serv = None
   
   def get_question(self, lvl=False, lng=False):
     if self.current is None:
@@ -171,6 +174,11 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       for k in self.cmds.keys():
         serv.privmsg(canal, k + ': ' + self.cmds[k])
   
+  def quit(self, signum, frame):
+    print "On m'a dit de me déconnecter ... Bye !"
+    self.serv.privmsg(self.CHAN, "On m'a dit de me déconnecter ... Bye !")
+    sys.exit(0)
+  
   def display_question(self, serv, canal):
     if self.current is None:
       serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
@@ -184,11 +192,16 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
   def on_welcome(self, serv, ev):
     canal = ev.target()
     serv.join(self.CHAN)
-    serv.privmsg(canal, "Bonjour tout le monde !")
+    serv.privmsg(self.CHAN, "Bonjour tout le monde !")
+    self.serv = serv
     
   def on_pubmsg(self, serv, ev):
+    if self.serv is None:
+      self.serv = serv
+    
     auteur = irclib.nm_to_n(ev.source())
     canal = ev.target()
+    print canal
     #arg1 = ev.arguments()[0].lower()
     arg1 = ev.arguments()[0]
     print auteur + canal + ' : ' + arg1 + '\n'
@@ -254,7 +267,11 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     serv.join(self.CHAN)
     serv.action(canal, "Bah non. Tu peux pas me sortir (non mais croyait quoi, l'aut' !)")
     
+
 if __name__ == "__main__":
-  LPIC_Bot().start()
+  bot = LPIC_Bot()
+  signal.signal(signal.SIGTERM, bot.quit)
+  bot.start()
+  #LPIC_Bot().start()
 
 
