@@ -63,6 +63,16 @@ class LPIC_DB:
     else:
       return 0
   
+  def count_questions(self):
+    query = "SELECT COUNT(*) FROM " + self.QU_TABLE
+    self.cu.execute(query)
+    self.co.commit()
+    r = self.cu.fetchone()
+    if r is not None:
+      return r[0]
+    else:
+      return 0
+  
   def upgrade_user(self, u_pseudo):
     # verify if user already exist
     if len(u_pseudo) > 255:
@@ -126,6 +136,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     self.whitelist = ["Meier_Link", "meier_link"]
     self.cmds = {
       'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
+      'count': "Savoir combien il y a de question dans la base.",
       'score': "Pour afficher le score d'une personne. Tu peux afficher le score pour plusieurs personnes en listant leur pseudo",
       'start': "Ça, c'est pour me demander de poser une question. Vous pouvez passer '101', '102', ... en paramètre pour filtrer les questions par niveau",
       'test':  "Tu penses avoir la réponse ? Rajoutes-la après cette commande (s'il y en a plusieurs, ne met pas d'espace)",
@@ -194,6 +205,9 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
         # Display help
         if cmd == 'help':
           self.usage(serv, canal, params)
+        elif cmd == 'count':
+          cnt = db.count_questions()
+          serv.privmsg(canal, "Pour le moment, on a " + cnt + " questions a vous proposer.")
         # Start a new quizz
         elif cmd == 'start':
           lvl = False
