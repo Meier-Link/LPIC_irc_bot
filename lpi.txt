@@ -1,3 +1,11 @@
+Websites to take some questions/answers from : 
+
+http://www.linux-praxis.de/lpisim/lpi.html
+http://www.itexampractice.org/
+http://gnosis.cx/publish/programming/exam101.html
+http://www.linuxcareer.com/linux-lpi-101-practice-quiz
+http://www.penguintutor.com/certification.php
+
     XXX do not forget to spcify the question level XXX
 
 q1 - 101 - ok
@@ -140,3 +148,51 @@ La commande paste permet de
   b- joindre deux fichiers côte à côte simplement sans critères.
   c- laisser un processus en mémoire.
 b
+
+q21 - 101
+What is the numerical value of the SIGHUP signal, often used with the kill command to cause a daemonto reload its configuration file?
+	a- 1
+	b- 9
+	c- 15
+	d- 14
+a
+
+q22 - 101
+Which of the following contains the list of operating systems that grub will display at boot time.
+	a- /etc/grub.cfg
+	b- /etc/grub/menu.lst
+	c- /boot/grub.cfg
+	d- /boot/grub/menu.lst
+d
+
+q23 - 101
+ 60 Looking at the find command shown below what effect does the "-mtime -3" have?  find /home -mtime -3
+	a- find files at least 3 seconds old
+	b- find files at least 3 hours old
+	c- find files at least 3 months old
+	d- find files at least 3 days old
+d
+
+q24 - 101
+A system is set so that it gives a graphical login prompt. Which of the following configuration files could this be enabled in?
+	a- /etc/startup
+	b- /etc/inittab
+	c- /etc/X11/start
+	d-  /etc/login
+b
+
+q25 - 101
+Which of the following will allow a computer to make connections to the local X server, only if its ip address is 192.168.3.4? Select the most appropriate answer.
+	a- xhost 192.168.3.4
+	b- xhost -192.168.3.4
+	c- xhost --allow=192.168.3.4
+	d- xhost +
+a
+
+q26 - 101
+What command can be used to save standard input into a file as well as send it to standard output?
+	a- tee
+	b- 2&>1
+	c- 2>&1
+	d- >
+a
