@@ -15,7 +15,7 @@ import ircbot
 import time
 import signal
 import sys
-from random import randrange, randint, sample
+from random import randrange, randint, sample, shuffle
 from unicodedata import normalize
 from datetime import datetime
 
@@ -123,6 +123,7 @@ class LPIC_DB:
     query = "SELECT " + self.AN_FIELDS + " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
     self.cu.execute(query, (selected['q_id'],))
     rows = self.cu.fetchall()
+    shuffle(rows)
     cpt = 0
     for row in rows:
       if row['a_is_right']: question['r'] += alphabet[cpt]
@@ -154,12 +155,20 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
       self.current = self.db.select_random(lvl, lng)
   
   def check_answer(self, u, a):
-    if a == self.current['r']:
-      self.current = None
-      self.db.upgrade_user(u)
-      return True
-    else:
-      return False
+    for i in a:
+      if i not in self.current:
+        #a = a.replace(i, '')
+        return False
+      #else:
+      #  return False
+    self.current = None
+    return True
+    #if a == self.current['r']:
+    #  self.current = None
+    #  self.db.upgrade_user(u)
+    #  return True
+    #else:
+    #  return False
   
   def usage(self, serv, canal, params):
     serv.privmsg(canal, 'Usage: !<cmd> [param [param [...]]]')

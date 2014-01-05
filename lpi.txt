@@ -54,14 +54,14 @@ q7 - 101 - ok
 What is the octal value for the chmod command to set a file so that it can be read and written to by the owner, and read by the group and all other users? It should not be executable.
 The required permissions are 644
 
-q8 - 101
+q8 - 101 - ok
 La commande ________ permet de lister les périphériques USB présents sur la machine.
   lspci
   lsusb
   ls /dev
 lsusb
 
-q9 - 101
+q9 - 101 - ok
 Comment peut-on afficher le contenu d'un fichier en sens inverse ?
   cat -r
   tail
@@ -69,28 +69,28 @@ Comment peut-on afficher le contenu d'un fichier en sens inverse ?
   sort -r
 tac
 
-q10 - 101
+q10 - 101 - ok
 Le choix du périphérique de démarrage de la machine se fait
   Dans le BIOS
   Avec une option du chargeur de démarrage (boot loader)
   Automatiquement
 Dans le BIOS
 
-q11 - 101
+q11 - 101 - ok
 Quels droits sont positionnés par la commande chmod 1777 un_repertoire sur un répertoire (plusieurs réponses) ?
   a- Elle permet à tous les utilisateurs d'accéder au répertoire.
   b- Elle interdit l'accès aux autres utilisateurs que le groupe.
   c- Elle permet à tous de créer des fichiers dans ce répertoire, mais pas de modifier ou d'effacer ceux des autres.
 ac
 
-q12 - 101
+q12 - 101 - ok
 La commande locate
   a- fonctionne comme find mais avec des options différentes.
   b- est plus efficace que find car elle utilise un index.
   c- permet de changer la langue par défaut de Linux.
 b
 
-q13 - 101
+q13 - 101 - ok
 Les droits d'un fichier sont « rw-r--r-- ». La valeur de umask est:
   a- 666.
   b- 022.
@@ -98,14 +98,14 @@ Les droits d'un fichier sont « rw-r--r-- ». La valeur de umask est:
   d- 133.
 bd
 
-q14 - 101
+q14 - 101 - ok
 Quelle différence y a-t-il entre les systèmes de fichiers ext2 et ext3 ?
   a- ext3 est un nouveau système, incompatible avec ext2.
   b- ext3 est une simple extension de ext2 comprenant la journalisation.
   c- on peut passer de ext2 à ext3 et inversement très facilement.
 bc
 
-q15 - 101
+q15 - 101 - ok
 Quelle commande utiliser pour afficher les messages du noyau lors du démarrage du système ?
   a- mess.
   b- dmesg.
@@ -113,7 +113,7 @@ Quelle commande utiliser pour afficher les messages du noyau lors du démarrage 
   d- lsmsg.
 b
 
-q16 - 101
+q16 - 101 - ok
 Quelle est la commande qui permet d'afficher toute les variables ?
   a- set
   b- varlist
@@ -121,28 +121,28 @@ Quelle est la commande qui permet d'afficher toute les variables ?
   d- ps
 a
 
-q17 - 101
+q17 - 101 - ok
 Quelle commande permet d’effacer tous les fichiers et les sous-répertoires de l’arborescence /home/nicolas/truc/ ?
   a- rm -r /home/nicolas/.
   b- rmdir /home/nicolas/truc.
   c- rm -r /home/nicolas/truc/*.
 c
 
-q18 - 101
+q18 - 101 - ok
 La commande pstree permet d’afficher
   a- l’arborescence des processus par « famille ». 
   b- uniquement les processus d’un utilisateur. 
   c- l’occupation du processeur par les processus. 
 a
 
-q19 - 101
+q19 - 101 - ok
 La commande killall permet de
   a- tuer tous les processus d'un utilisateur.
   b- tuer un processus sans connaître son PID. 
   c- envoyer tous les signaux standard à un processus. 
 b
 
-q20 - 101
+q20 - 101 - ok
 La commande paste permet de
   a- coller un fichier à la suite d'un autre.
   b- joindre deux fichiers côte à côte simplement sans critères.
