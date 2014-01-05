@@ -192,7 +192,10 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     if self.current is None:
       serv.privmsg(canal, "Aucune question trouvée ! Faudra penser à alimenter la bdd (ou checker la question oO) ...")
     else:
-      serv.privmsg(canal, "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q'])
+      msg = "Voici la question (niveau " + str(self.current['lvl']) + ") : " + self.current['q']
+      if len(self.current['r']) > 1:
+        msg += " (plusieurs réponses)"
+      serv.privmsg(canal, msg)
       keys = self.current['a'].keys()
       keys.sort()
       for k in keys:
