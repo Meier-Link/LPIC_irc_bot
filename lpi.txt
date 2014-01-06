@@ -1,198 +1,175 @@
-Websites to take some questions/answers from : 
+# Websites to take some questions/answers from :
+#
+# http://www.linux-praxis.de/lpisim/lpi.html
+# http://www.itexampractice.org/
+# http://gnosis.cx/publish/programming/exam101.html
+# http://www.linuxcareer.com/linux-lpi-101-practice-quiz
+# http://www.penguintutor.com/certification.php
+#
+#    XXX do not forget to spcify the question level and language XXX
 
-http://www.linux-praxis.de/lpisim/lpi.html
-http://www.itexampractice.org/
-http://gnosis.cx/publish/programming/exam101.html
-http://www.linuxcareer.com/linux-lpi-101-practice-quiz
-http://www.penguintutor.com/certification.php
-
-    XXX do not forget to spcify the question level XXX
-
-q1 - 101 - ok
+q1 - 101 - en - ok
 Which of the following permissions have the SUID value set?
-  4755
-  2755
-  1755
-The answer is 4755
+  4755 - 1
+  2755 - 0
+  1755 - 0
 
-q2 - 101 - ok
+q2 - 101 - en - ok
 When typing at the shell, what character can be used to split a command across multiple lines.
-The \ character inserted at the end of a line indicates that the command continues to the next line. 
+The \ character inserted at the end of a line indicates that the command continues to the next line.
 
-q3 - 101 - ok
+q3 - 101 - en - ok
 What option on the tail command will cause it to keep displaying new lines as they are written to the file (e.g. when viewing current log files)?
-  -o
-  -r
-  -i
-  -l
-  -f
--f
+  -o - 0
+  -r - 0
+  -i - 0
+  -l - 0
+  -f - 1
 
-q4 - 101 - ok
+q4 - 101 - en - ok
 Which of the following will run command2, only if command1 is successful.
-  command1 > command2
-  command1 & command2
-  command1 && command2
-  command1 | command2
-  command1 || command2
-The answer is command1 && command2. The > sign will cause command2 to be replaced with the output of command1. A single & will cause the first command to run in the background. The | is the or symbol, not the and symbol. 
+  command1 > command2 - 0
+  command1 & command2 - 0
+  command1 && command2 - 1
+  command1 | command2 - 0
+  command1 || command2 - 0
 
-q5 - 101 - ok
+q5 - 101 - en - ok
 What umask value would ensure that, by default, new files and directories created would not give any permissions except to the owner?
-A umask of 0077 will ensure that, by default, only the owner has permissions for any newly created files and directories. 
+A umask of 0077 will ensure that, by default, only the owner has permissions for any newly created files and directories.
 
-q6 - 101 - ok
-Which of the following is often used for the configuration of X11? 
-  /etc/X11/xorg.conf
-  /etc/X11/xorgConfig
-  /etc/X11/xconfiguration
-  /etc/Xconfig
-  /etc/X.conf
-The correct answer is /etc/X11/xorg.conf (for X.org) 
+q6 - 101 - en - ok
+Which of the following is often used for the configuration of X11?
+  /etc/X11/xorg.conf - 1
+  /etc/X11/xorgConfig - 0
+  /etc/X11/xconfiguration - 0
+  /etc/Xconfig - 0
+  /etc/X.conf - 0
 
-q7 - 101 - ok
+q7 - 101 - en - ok
 What is the octal value for the chmod command to set a file so that it can be read and written to by the owner, and read by the group and all other users? It should not be executable.
 The required permissions are 644
 
-q8 - 101 - ok
+q8 - 101 - fr - ok
 La commande ________ permet de lister les périphériques USB présents sur la machine.
-  lspci
-  lsusb
-  ls /dev
-lsusb
+  lspci - 0
+  lsusb - 1
+  ls /dev - 0
 
-q9 - 101 - ok
+q9 - 101 - fr - ok
 Comment peut-on afficher le contenu d'un fichier en sens inverse ?
-  cat -r
-  tail
-  tac
-  sort -r
-tac
+  cat -r - 0
+  tail - 0
+  tac - 1
+  sort -r - 0
 
-q10 - 101 - ok
+q10 - 101 - fr - ok
 Le choix du périphérique de démarrage de la machine se fait
-  Dans le BIOS
-  Avec une option du chargeur de démarrage (boot loader)
-  Automatiquement
-Dans le BIOS
+  Dans le BIOS - 1
+  Avec une option du chargeur de démarrage (boot loader) - 0
+  Automatiquement - 0
 
-q11 - 101 - ok
+q11 - 101 - fr - ok
 Quels droits sont positionnés par la commande chmod 1777 un_repertoire sur un répertoire (plusieurs réponses) ?
-  a- Elle permet à tous les utilisateurs d'accéder au répertoire.
-  b- Elle interdit l'accès aux autres utilisateurs que le groupe.
-  c- Elle permet à tous de créer des fichiers dans ce répertoire, mais pas de modifier ou d'effacer ceux des autres.
-ac
+  Elle permet à tous les utilisateurs d'accéder au répertoire. - 1
+  Elle interdit l'accès aux autres utilisateurs que le groupe. - 0
+  Elle permet à tous de créer des fichiers dans ce répertoire, mais pas de modifier ou d'effacer ceux des autres. - 1
 
-q12 - 101 - ok
+q12 - 101 - fr - ok
 La commande locate
-  a- fonctionne comme find mais avec des options différentes.
-  b- est plus efficace que find car elle utilise un index.
-  c- permet de changer la langue par défaut de Linux.
-b
+  fonctionne comme find mais avec des options différentes. - 0
+  est plus efficace que find car elle utilise un index. - 1
+  permet de changer la langue par défaut de Linux. - 0
 
-q13 - 101 - ok
+q13 - 101 - fr - ok
 Les droits d'un fichier sont « rw-r--r-- ». La valeur de umask est:
-  a- 666.
-  b- 022.
-  c- 123.
-  d- 133.
-bd
+  666. - 0
+  022. - 1
+  123. - 0
+  133. - 1
 
-q14 - 101 - ok
+q14 - 101 - fr - ok
 Quelle différence y a-t-il entre les systèmes de fichiers ext2 et ext3 ?
-  a- ext3 est un nouveau système, incompatible avec ext2.
-  b- ext3 est une simple extension de ext2 comprenant la journalisation.
-  c- on peut passer de ext2 à ext3 et inversement très facilement.
-bc
+  ext3 est un nouveau système, incompatible avec ext2. - 0
+  ext3 est une simple extension de ext2 comprenant la journalisation. - 1
+  on peut passer de ext2 à ext3 et inversement très facilement. - 1
 
-q15 - 101 - ok
+q15 - 101 - fr - ok
 Quelle commande utiliser pour afficher les messages du noyau lors du démarrage du système ?
-  a- mess.
-  b- dmesg.
-  c- bootmsg.
-  d- lsmsg.
-b
+  mess. - 0
+  dmesg. - 1
+  bootmsg. - 0
+  lsmsg. - 0
 
-q16 - 101 - ok
+q16 - 101 - fr - ok
 Quelle est la commande qui permet d'afficher toute les variables ?
-  a- set
-  b- varlist
-  c- vshow var
-  d- ps
-a
+  set - 1
+  varlist - 0
+  vshow var - 0
+  ps - 0
 
-q17 - 101 - ok
+q17 - 101 - fr - ok
 Quelle commande permet d’effacer tous les fichiers et les sous-répertoires de l’arborescence /home/nicolas/truc/ ?
-  a- rm -r /home/nicolas/.
-  b- rmdir /home/nicolas/truc.
-  c- rm -r /home/nicolas/truc/*.
-c
+  rm -r /home/nicolas/. - 0
+  rmdir /home/nicolas/truc. - 0
+  rm -r /home/nicolas/truc/*. - 1
 
-q18 - 101 - ok
+q18 - 101 - fr - ok
 La commande pstree permet d’afficher
-  a- l’arborescence des processus par « famille ». 
-  b- uniquement les processus d’un utilisateur. 
-  c- l’occupation du processeur par les processus. 
-a
+  l’arborescence des processus par « famille ». - 1
+  uniquement les processus d’un utilisateur. - 0
+  l’occupation du processeur par les processus. - 0
 
-q19 - 101 - ok
+q19 - 101 - fr - ok
 La commande killall permet de
-  a- tuer tous les processus d'un utilisateur.
-  b- tuer un processus sans connaître son PID. 
-  c- envoyer tous les signaux standard à un processus. 
-b
+  tuer tous les processus d'un utilisateur. - 0
+  tuer un processus sans connaître son PID. - 1
+  envoyer tous les signaux standard à un processus. - 0
 
-q20 - 101 - ok
+q20 - 101 - fr - ok
 La commande paste permet de
-  a- coller un fichier à la suite d'un autre.
-  b- joindre deux fichiers côte à côte simplement sans critères.
-  c- laisser un processus en mémoire.
-b
+  coller un fichier à la suite d'un autre. - 0
+  joindre deux fichiers côte à côte simplement sans critères. - 1
+  laisser un processus en mémoire. - 0
 
-q21 - 101
+q21 - 101 - en
 What is the numerical value of the SIGHUP signal, often used with the kill command to cause a daemonto reload its configuration file?
-	a- 1
-	b- 9
-	c- 15
-	d- 14
-a
+        1 - 1
+        9 - 0
+        15 - 0
+        14 - 0
 
-q22 - 101
+q22 - 101 - en
 Which of the following contains the list of operating systems that grub will display at boot time.
-	a- /etc/grub.cfg
-	b- /etc/grub/menu.lst
-	c- /boot/grub.cfg
-	d- /boot/grub/menu.lst
-d
+        /etc/grub.cfg - 0
+        /etc/grub/menu.lst - 0
+        /boot/grub.cfg - 0
+        /boot/grub/menu.lst - 1
 
-q23 - 101
- 60 Looking at the find command shown below what effect does the "-mtime -3" have?  find /home -mtime -3
-	a- find files at least 3 seconds old
-	b- find files at least 3 hours old
-	c- find files at least 3 months old
-	d- find files at least 3 days old
-d
+q23 - 101 - en
+ 60 Looking at the find command shown below what effect does the "-mtime -3" have? find /home -mtime -3
+        find files at least 3 seconds old - 0
+        find files at least 3 hours old - 0
+        find files at least 3 months old - 0
+        find files at least 3 days old - 1
 
-q24 - 101
+q24 - 101 - en
 A system is set so that it gives a graphical login prompt. Which of the following configuration files could this be enabled in?
-	a- /etc/startup
-	b- /etc/inittab
-	c- /etc/X11/start
-	d-  /etc/login
-b
+        /etc/startup - 0
+        /etc/inittab - 1
+        /etc/X11/start - 0
+        /etc/login - 0
 
-q25 - 101
+q25 - 101 - en
 Which of the following will allow a computer to make connections to the local X server, only if its ip address is 192.168.3.4? Select the most appropriate answer.
-	a- xhost 192.168.3.4
-	b- xhost -192.168.3.4
-	c- xhost --allow=192.168.3.4
-	d- xhost +
-a
+        xhost 192.168.3.4 - 1
+        xhost -192.168.3.4 - 0
+        xhost --allow=192.168.3.4 - 0
+        xhost + - 0
 
-q26 - 101
+q26 - 101 - en
 What command can be used to save standard input into a file as well as send it to standard output?
-	a- tee
-	b- 2&>1
-	c- 2>&1
-	d- >
-a
+        tee - 1
+        2&>1 - 0
+        2>&1 - 0
+        > - 0
