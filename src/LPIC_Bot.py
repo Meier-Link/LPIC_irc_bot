@@ -134,8 +134,8 @@ class LPIC_DB:
 
 class LPIC_Bot(ircbot.SingleServerIRCBot):
   def __init__(self):
-    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC")
-    self.CHAN = '#crfn'
+    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC")
+    self.CHAN = '#lpic-fr'
     self.whitelist = ["Meier_Link", "meier_link"]
     self.cmds = {
       'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
