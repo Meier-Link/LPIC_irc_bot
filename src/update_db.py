@@ -96,7 +96,7 @@ class LPIC_DB:
 
 class Updater:
   def __init__(self):
-    self.infile = '../lpi.txt'
+    self.infile = 'lpi.txt'
     self.db = LPIC_DB()
   
   def _parse(self, lex):
