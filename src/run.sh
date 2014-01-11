@@ -26,8 +26,8 @@ run_init()
   if [ -d $1 ]
   then
     echo "Starting init..."
-    cp $1/src/* ./
-    cp $1/lpi.txt ./
+    cp -fv $1/src/* ./
+    cp -fv $1/lpi.txt ./
   else
     echo "$1 is not a valid path !!!"
     exit 10
