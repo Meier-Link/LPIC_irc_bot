@@ -51,3 +51,6 @@ CREATE TABLE IF NOT EXISTS lang
 
 INSERT INTO level (le_name) VALUES (101), (102), (201), (202), (301), (302), (303);
 INSERT INTO lang (la_short) VALUES ('fr'), ('en');
+
+-- wanted to exit from sqlite3 prompt after init
+.exit
