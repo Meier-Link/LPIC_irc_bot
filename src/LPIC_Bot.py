@@ -154,12 +154,13 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
   
   def check_answer(self, u, a):
     for i in a:
-      if i not in self.current:
+      if i not in self.current['r']:
         #a = a.replace(i, '')
         return False
       #else:
       #  return False
     self.current = None
+    self.db.upgrade_user(u)
     return True
     #if a == self.current['r']:
     #  self.current = None
