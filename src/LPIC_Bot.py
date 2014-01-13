@@ -134,9 +134,11 @@ class LPIC_DB:
 
 class LPIC_Bot(ircbot.SingleServerIRCBot):
   def __init__(self):
-    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC")
-    self.CHAN = '#lpic-fr'
-    self.whitelist = ["Meier_Link", "meier_link"]
+    #ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC") # original
+    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC")
+    #self.CHAN = '#lpic-fr' # original
+    self.CHAN = '#zone_tampon'
+    self.whitelist = ["Meier_Link", "meier_link", "WarLocG"]
     self.cmds = {
       'help':  "Afficher l'aide (les paramètres permettent d'afficher l'aide seulement pour les commandes listées)",
       'count': "Savoir combien il y a de question dans la base.",
@@ -185,6 +187,7 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
   def quit(self, signum, frame):
     print "On m'a dit de me déconnecter ... Bye !"
     self.serv.privmsg(self.CHAN, "On m'a dit de me déconnecter ... Bye !")
+    self.db.close()
     sys.exit(0)
   
   def display_question(self, serv, canal):
@@ -211,7 +214,12 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     canal = ev.target()
     #arg1 = ev.arguments()[0].lower()
     arg1 = ev.arguments()[0]
-    print auteur + canal + ' : ' + arg1 + '\n'
+
+    if (auteur in self.whitelist) and (self.channels[canal].is_oper(auteur)):
+      superv = "true"
+    else:
+      superv = "false"
+    print auteur + canal + ' : ' + arg1 + " ( supervisor ? : " + superv + " )\n"
     
     args = arg1.split(" ")
     if len(args) > 1:
@@ -221,6 +229,14 @@ class LPIC_Bot(ircbot.SingleServerIRCBot):
     if args[0][0] == '!':
       print('args: ' + str(len(args)))
       cmd = args[0][1:]
+
+      # Supervisor command -forced exit-
+      if superv == 'true':
+        if cmd == 'quit':
+          print "séquence de fermeture forcée amorcée par superviseur."
+          serv.disconnect()
+          sys.exit(0)
+
       if cmd in self.cmds.keys():
         # Display help
         if cmd == 'help':
