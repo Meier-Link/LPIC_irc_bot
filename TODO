@@ -1,0 +1,12 @@
+# Add here all ideas to enhance this bot
+#
+# (French and English ar both ok ^^')
+
+Add an attribute to store last asked question to avoid this one for the next random set_question.
+
+Re implement randomization of answers.
+
+A solution to reduce score of people who send more than 1 bad answer to the bot.
+
+add timer to limit the time to answer a question.
+
