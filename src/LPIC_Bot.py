@@ -123,7 +123,7 @@ class LPIC_DB:
     query = "SELECT " + self.AN_FIELDS + " FROM " + self.AN_TABLE + " WHERE a_q_id=?"
     self.cu.execute(query, (selected['q_id'],))
     rows = self.cu.fetchall()
-    #shuffle(rows)
+    shuffle(rows)
     cpt = 0
     for row in rows:
       if row['a_is_right']: question['r'] += alphabet[cpt]
@@ -134,9 +134,9 @@ class LPIC_DB:
 
 class LPIC_Bot(ircbot.SingleServerIRCBot):
   def __init__(self):
-    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC") # original
+    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC") # original
     #ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC")
-    self.CHAN = '#lpic-fr' # original
+    self.CHAN = '#crfn' # original
     #self.CHAN = '#zone_tampon'
     self.whitelist = ["Meier_Link", "meier_link", "WarLocG"]
     self.cmds = {
