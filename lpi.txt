@@ -5,6 +5,7 @@
 # http://gnosis.cx/publish/programming/exam101.html
 # http://www.linuxcareer.com/linux-lpi-101-practice-quiz
 # http://www.penguintutor.com/certification.php
+# http://www.examcollection.com/lpi_exams.html
 #
 #    XXX do not forget to spcify the question level and language XXX
 
