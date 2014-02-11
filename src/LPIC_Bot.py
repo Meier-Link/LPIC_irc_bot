@@ -134,9 +134,9 @@ class LPIC_DB:
 
 class LPIC_Bot(ircbot.SingleServerIRCBot):
   def __init__(self):
-    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC") # original
+    ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot", "Bot poseur de question de LPIC") # original
     #ircbot.SingleServerIRCBot.__init__(self, [("irc.freenode.net", 6667)], "LPIC_Bot_test", "Bot poseur de question de LPIC")
-    self.CHAN = '#crfn' # original
+    self.CHAN = '#lpic-fr' # original
     #self.CHAN = '#zone_tampon'
     self.whitelist = ["Meier_Link", "meier_link", "WarLocG"]
     self.cmds = {
