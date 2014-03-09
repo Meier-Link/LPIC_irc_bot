@@ -12,10 +12,11 @@
 -- Store user infos
 DROP TABLE IF EXISTS user;
 CREATE  TABLE IF NOT EXISTS user
-  (u_id INTEGER PRIMARY KEY AUTOINCREMENT ,
-  u_pseudo  VARCHAR(255) NOT NULL ,
-  u_start   DATETIME NOT NULL ,
-  u_score   INTEGER );
+  (u_id         INTEGER PRIMARY KEY AUTOINCREMENT ,
+  u_pseudo      VARCHAR(255) NOT NULL ,
+  u_start       DATETIME NOT NULL ,
+  u_is_manager  INTEGER NOT NULL DEFAULT 0,
+  u_score       INTEGER );
 
 -- Store questions
 DROP TABLE IF EXISTS question;
