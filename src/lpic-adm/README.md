@@ -18,13 +18,18 @@ We'll use the SQLite driver to directly access the lpic database with PHP (PHP w
 * Question
 * Answer
 * Lang
-* Lvl
-Lang and Lvl will be added only for convenience.
+* Level
+Lang and Level will be added only for convenience.
 
 ### htdocs/controller
 
-* Admin : adding a page to allow bot start/restart directly from Webserver (Will want some tests)
-* QnA : Allowed users will edit/add questions and anwsers from this section. It will contain a page to see available q/a and a second one to edit/add q/a.
+* Admin: adding a page to allow bot start/restart directly from Webserver (Will want some tests)
+* Manage: Allowed users will edit/add questions and anwsers from this section. It will contain a page to see available q/a and a second one to edit/add q/a.
+
+### htdocs/view
+* admin: bot.php (start/restart bot), home.php
+* manage: home.php (display available questions), edit.php (to edit/add question)
+* main: only content customization 
 
 The htdocs tree will be reproduced here with only changed/added files
 
