@@ -53,9 +53,9 @@ class Answer implements Model
     
     $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE;
     $db = DbConnect::getInstance();
-    $questions = db->query($query, "Answer");
+    $answers = db->query($query, "Answer");
     if (!is_array($questions)) $questions = array($questions);
-    return $questions;
+    return $answers;
   }
   
   public static function findById($id)
@@ -65,8 +65,19 @@ class Answer implements Model
     
     $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE . " WHERE a_id=:a_id";
     $db = DbConnect::getInstance();
-    $question = $db->query($query, "Answer", array(':a_id' => $id));
-    return $question;
+    $answer = $db->query($query, "Answer", array(':a_id' => $id));
+    return $answer;
+  }
+
+  public function findByQuestionId($id)
+  {
+    if ($id < 1)
+      return null;
+    
+    $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE . " WHERE a_q_id=:q_id";
+    $db = DbConnect::getInstance();
+    $answers = $db->query($query, "Answer", array(':q_id' => $id));
+    return $answers;
   }
  
   public function save($force = true)
@@ -105,7 +116,7 @@ class Answer implements Model
   public function delete()
   {
     $query = "DELETE FROM " . self::$TABLE . " WHERE a_id=:a_id";
-    $params = array(':a_id' => $this->q_id);
+    $params = array(':a_id' => $this->a_id);
     
     $db = DbConnect::getInstance();
     return $db->query($query, null, $params);

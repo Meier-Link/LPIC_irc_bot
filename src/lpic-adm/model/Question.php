@@ -53,7 +53,7 @@ class Question implements Model
     
     $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE;
     $db = DbConnect::getInstance();
-    $questions = db->query($query, "Question");
+    $questions = $db->query($query, "Question");
     if (!is_array($questions)) $questions = array($questions);
     return $questions;
   }
@@ -110,4 +110,12 @@ class Question implements Model
     $db = DbConnect::getInstance();
     return $db->query($query, null, $params);
   }
+
+  public static function findLast()
+  {
+    $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE . " ORDER BY q_id DESC LIMIT 1;";
+    
+    $db = DbConnect::getInstance();
+    return $db->query($query, "Question");
+  ]
 }
