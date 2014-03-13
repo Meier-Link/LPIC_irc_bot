@@ -19,6 +19,7 @@ We'll use the SQLite driver to directly access the lpic database with PHP (PHP w
 * Answer
 * Lang
 * Level
+
 Lang and Level will be added only for convenience.
 
 ### htdocs/controller
