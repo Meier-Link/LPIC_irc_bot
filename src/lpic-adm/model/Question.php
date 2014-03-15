@@ -117,5 +117,5 @@ class Question implements Model
     
     $db = DbConnect::getInstance();
     return $db->query($query, "Question");
-  ]
+  }
 }
