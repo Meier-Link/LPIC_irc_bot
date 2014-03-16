@@ -55,7 +55,9 @@
       <a class="menu" style="text-decoration:none" href="/index">Accueil</a>
       <?php if (isset($_SESSION['user']) && !is_null($_SESSION['user'])) { ?>
       <?php if ($controller->isAdmin()) { ?>
-      <a class="menu" style="text-decoration:none" href="/admin">Administration</a>
+      <a class="menu" style="text-decoration:none" href="/admin/home">Query Page</a>
+      <a class="menu" style="text-decoration:none" href="/admin/users">Manage users</a>
+      <a class="menu" style="text-decoration:none" href="/admin/bot">Bot status</a>
       <?php } ?>
       <a class="menu" style="text-decoration:none" href="/main/logout">Logout</a>
       <?php } else { ?>

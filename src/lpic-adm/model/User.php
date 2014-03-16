@@ -3,10 +3,10 @@
 class User implements Model
 {
   private static $TABLE = "user";
-  private static $FIELDS = "u_id, u_name, u_pwd, u_is_manager, u_mail";
+  private static $FIELDS = "u_id, u_pseudo, u_pwd, u_is_manager";
   
   private $u_id         = 0;
-  private $u_name       = 'guest';
+  private $u_pseudo     = 'guest';
   private $u_pwd        = '';
   private $u_is_manager = 0;
   private $u_mail       = '';
@@ -19,10 +19,16 @@ class User implements Model
     return $this->u_id;
   }
   
+  public function u_pseudo($value = null)
+  {
+    if ($value != null) $this->u_pseudo = $value;
+    return $this->u_pseudo;
+  }
+  
+  // XXX compatibility method
   public function u_name($value = null)
   {
-    if ($value != null) $this->u_name = $value;
-    return $this->u_name;
+    return $this->u_pseudo($value);
   }
   
   public function u_pwd($value = null)
@@ -30,8 +36,14 @@ class User implements Model
     return $this->u_pwd;
   }
 
-  public function u_is_manager()
+  public function u_is_manager($is_manager = null)
   {
+    if(!is_null($is_manager))
+    {
+      if($is_manager != 0) $is_manager = 1;
+      $this->u_is_manager = $is_manager;
+    }
+    
     return $this->u_is_manager;
   }
   
@@ -116,17 +128,17 @@ class User implements Model
   }
   
   //@Specific methods
-  public static function findByLoginPwd($uname, $upwd)
+  public static function findByLoginPwd($upseudo, $upwd)
   {
     $adm = Conf::get('ADMIN');
-    if ($uname == $adm['LOGIN'])
+    if ($upseudo == $adm['LOGIN'])
     {
       if ($adm['PSSWD'] != null)
       {
         if ($upwd == $adm['PSSWD'])
         {
           $user = new User();
-          $user->u_name($uname);
+          $user->u_pseudo($upseudo);
           $user->u_pwd($upwd);
           return $user;
         }
@@ -136,8 +148,8 @@ class User implements Model
         }
       }
     }
-    $query = "SELECT " . self::$FIELD . " FROM " . self::$TABLE . " WHERE u_name=:u_name";
-    $params = array(':u_name' => $uname);
+    $query = "SELECT " . self::$FIELD . " FROM " . self::$TABLE . " WHERE u_pseudo=:u_pseudo";
+    $params = array(':u_pseudo' => $upseudo);
     $db = DbConnect::getInstance();
     $user = $db->query($query, 'User', $params);
     if (crypt($upwd, $user->u_pwd()) == $user->u_pwd)
