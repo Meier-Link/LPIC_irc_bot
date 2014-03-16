@@ -35,7 +35,7 @@ class Manage extends Controller
     
     if(!is_null($question))
     {
-      if(isset($_POST['qu']) 
+      if(isset($_POST['qu'])) 
       {
         $e = $_POST['qu'];
         // Firstly, set question
@@ -50,8 +50,8 @@ class Manage extends Controller
           $an->a_q_id($qfa->q_id());
           if ($a['is_right'] == "yes") $an->a_is_right(1);
           $an->a_txt($a['txt']);
-          $an->save()
-        ]
+          $an->save();
+        }
       }
     }
     else

@@ -5,7 +5,7 @@
 
 class Level implements Model
 {
-  private static $TABLE = "answer";
+  private static $TABLE = "level";
   private static $FIELDS = "le_id, le_name";
   
   private $le_id   = 0;
@@ -39,7 +39,7 @@ class Level implements Model
     
     $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE;
     $db = DbConnect::getInstance();
-    $questions = db->query($query, "Level");
+    $questions = $db->query($query, "Level");
     if (!is_array($questions)) $questions = array($questions);
     return $questions;
   }

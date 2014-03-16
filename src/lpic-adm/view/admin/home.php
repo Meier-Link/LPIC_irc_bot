@@ -15,7 +15,7 @@
         if ($i == 0)
         {
           $keys = array_keys($res[$i]);
-          $w = 99 / (count($keys) + 1);
+          $w = floor(99 / (count($keys) + 1)) - 1;
           echo '<div class="cell" style="width:' . $w . '%">&nbsp;</div>';
           foreach($keys as $k)
           {

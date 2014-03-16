@@ -1,12 +1,12 @@
 <h2>Manage users</h2>
 <div class="table">
-<div class="line head">
-  <div class="cell" style="width:30%;">Pseudo</div>
-  <div class="cell" style="width:30%;">Is manager ?</div>
-  <div class="cell" style="width:30%;">Reset Password</div>
-  <div class="cell" style="width:5%;">&nbsp;</div>
-</div>
-<?php
+  <div class="line head">
+    <div class="cell" style="width:30%;">Pseudo</div>
+    <div class="cell" style="width:30%;">Is manager ?</div>
+    <div class="cell" style="width:30%;">Reset Password</div>
+    <div class="cell" style="width:5%;">&nbsp;</div>
+  </div>
+  <?php
   foreach($controller->data['users'] as $u)
   {
     ?>
@@ -29,5 +29,5 @@
     </div>
     <?php
   }
-?>
+  ?>
 </div>

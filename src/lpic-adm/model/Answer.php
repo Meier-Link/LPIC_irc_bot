@@ -53,7 +53,7 @@ class Answer implements Model
     
     $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE;
     $db = DbConnect::getInstance();
-    $answers = db->query($query, "Answer");
+    $answers = $db->query($query, "Answer");
     if (!is_array($questions)) $questions = array($questions);
     return $answers;
   }
