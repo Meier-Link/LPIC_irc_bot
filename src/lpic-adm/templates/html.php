@@ -54,9 +54,9 @@
     <div id="menu">
       <a class="menu" style="text-decoration:none" href="/index">Accueil</a>
       <?php if(isset($_SESSION['user']) && !is_null($_SESSION['user'])) { ?>
-      <?php if($_SESSION['user']->u_is_manager() == 1) { ?>
+      <?php //if($_SESSION['user']->u_is_manager() == 1) { ?>
       <a class="menu" style="text-decoration:none" href="/manage/home">Manage Questions</a>
-      <?php } ?>
+      <?php //} ?>
       <?php if($controller->isAdmin()) { ?>
       <a class="menu" style="text-decoration:none" href="/admin/home">Query Page</a>
       <a class="menu" style="text-decoration:none" href="/admin/users">Manage users</a>
