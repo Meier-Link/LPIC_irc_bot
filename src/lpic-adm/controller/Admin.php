@@ -43,21 +43,21 @@ class Admin extends Controller
     if(isset($_POST['user']))
     {
       $pu = $_POST['user'];
-      if($pu['id'] == "0")
+      $uid = $this->params['3'];
+      if($uid == "0")
         $u = new User();
       else
-        $u = User::findById($pu['id']);
+        $u = User::findById($uid);
       if(!is_null($u))
       {
         /*if($u->u_id() == $_SESSIO['user']->u_id()
         {
           Log::err('Changing your own informations is forbidden !');
         }*/
-        //$u->u_name($pu['name']);
-        $u->u_pwd(crypt($pu['pwd']));
-        if ($pu['is_manager'] == "1") $u->is_manager(1);
-        $u->u_save();
-        Log::inf('User created !');
+        if($pu['pwd'] != "") $u->u_pwd(crypt($pu['pwd']));
+        if($pu['is_manager'] == "1") $u->u_is_manager(1);
+        $u->save();
+        Log::inf('User edited !');
       }
       else
       {

@@ -3,10 +3,11 @@
 class User implements Model
 {
   private static $TABLE = "user";
-  private static $FIELDS = "u_id, u_pseudo, u_pwd, u_is_manager";
+  private static $FIELDS = "u_id, u_pseudo, u_start, u_pwd, u_is_manager";
   
   private $u_id         = 0;
   private $u_pseudo     = 'guest';
+  private $u_start      = '0000-00-00 00:00:00';
   private $u_pwd        = '';
   private $u_is_manager = 0;
   private $u_mail       = '';
@@ -31,8 +32,14 @@ class User implements Model
     return $this->u_pseudo($value);
   }
   
+  public function u_start()
+  {
+    return $this->u_start;
+  }
+  
   public function u_pwd($value = null)
   {
+    if(!is_null($value)) $this->u_pwd = $value;
     return $this->u_pwd;
   }
 
@@ -85,7 +92,7 @@ class User implements Model
     return $user;
   }
   
-  public function save($force = true)
+  public function save($force = false)
   {
     $params = array();
     if ($this->u_id == 0 || $force)
@@ -112,6 +119,7 @@ class User implements Model
       }
       $query = rtrim($query, ", ") . " WHERE u_id = :u_id";
     }
+    var_dump($this->u_pwd);
     
     $db = DbConnect::getInstance();
     $db->query($query, null, $params);
@@ -148,7 +156,7 @@ class User implements Model
         }
       }
     }
-    $query = "SELECT " . self::$FIELD . " FROM " . self::$TABLE . " WHERE u_pseudo=:u_pseudo";
+    $query = "SELECT " . self::$FIELDS . " FROM " . self::$TABLE . " WHERE u_pseudo=:u_pseudo";
     $params = array(':u_pseudo' => $upseudo);
     $db = DbConnect::getInstance();
     $user = $db->query($query, 'User', $params);
