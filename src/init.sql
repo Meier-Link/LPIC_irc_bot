@@ -16,7 +16,8 @@ CREATE  TABLE IF NOT EXISTS user
   u_pseudo      VARCHAR(255) NOT NULL ,
   u_start       DATETIME NOT NULL ,
   u_is_manager  INTEGER NOT NULL DEFAULT 0,
-  u_score       INTEGER );
+  u_score       INTEGER ,
+  u_pwd         VARCHAR(255) NULL);
 
 -- Store questions
 DROP TABLE IF EXISTS question;
