@@ -69,10 +69,10 @@ class Question implements Model
     return $question;
   }
  
-  public function save($force = true)
+  public function save($force = false)
   {
     $params = array();
-    if ($this->u_id == 0 || $force)
+    if ($this->q_id == 0 || $force)
     {
       $query = "INSERT INTO " . self::$TABLE . " (" . self::$FIELDS . ") VALUES (";
       $fields = explode(', ', self::$FIELDS);

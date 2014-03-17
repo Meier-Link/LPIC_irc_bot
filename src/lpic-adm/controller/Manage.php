@@ -28,29 +28,75 @@ class Manage extends Controller
 
   public function edit()
   {
-    if ($this->params[3] != "0") 
-      $question = Question::findById($this->params[3]);
-    else
-      $question = new Question();
-    
-    if(!is_null($question))
+    if(!isset($this->params[3]) || $this->params[3] == "")
     {
-      if(isset($_POST['qu'])) 
+      Log::err('No question to edit !');
+      $this->notfound();
+      return;
+    }
+    
+    $qfa = null;
+    // Firstly, set question
+    if($this->params[3] != "0")
+    {
+      $qu = Question::findById($this->params[3]);
+      if(isset($_POST['q']))
       {
-        $e = $_POST['qu'];
-        // Firstly, set question
-        $question->q_txt($e['txt']);
-        $question->q_lvl(intval($e['lvl']));
-        $question->q_lang(intval($e['lang']));
-        $question->save();
-        $qfa = Question::findLast();
-        foreach($e['a'] as $a)
-        { // TODO how to do that ? ... :-°
-          $an = new Answer();
-          $an->a_q_id($qfa->q_id());
-          if ($a['is_right'] == "yes") $an->a_is_right(1);
-          $an->a_txt($a['txt']);
-          $an->save();
+        $e = $_POST['q'];
+        $qu->q_txt($e['txt']);
+        $qu->q_lvl(intval($e['lvl']));
+        $qu->q_lang(intval($e['lang']));
+        $qu->save();
+      }
+      $qfa = $qu;
+    }
+    else
+    {
+      $qu = new Question();
+      $an = array();
+      if(isset($_POST['q']))
+      {
+        $e = $_POST['q'];
+        $qu->q_txt($e['txt']);
+        $qu->q_lvl(intval($e['lvl']));
+        $qu->q_lang(intval($e['lang']));
+        $qu->save();
+      }
+      $qfa = Question::findLast();
+    }
+    
+    // And then, manage answers
+    if(!is_null($qfa))
+    {
+      $an = Answer::findByQuestionId($qfa->q_id());
+      if(isset($_POST['a'])) 
+      {
+        $a = $_POST['a'];
+        foreach($a as $k => $a)
+        { 
+          // TODO how to do that ? ... :-°
+          //$an = new Answer();
+          //$an->a_q_id($qfa->q_id());
+          //if ($a['is_right'] == "yes") $an->a_is_right(1);
+          //$an->a_txt($a['txt']);
+          //$an->save();
+          if($k == 'new') // Manage new answers
+          {
+            Log::inf('New answer');
+          }
+          else // Manage old answers
+          {
+            $an = Answer::findById($k);
+            if(!is_null($an))
+            {
+              //$an->
+              Log::inf('Answer ' . $an->a_id() . ' ');
+            }
+            else
+            {
+              Log::err("Question not found !");
+            }
+          }
         }
       }
     }
@@ -58,5 +104,9 @@ class Manage extends Controller
     {
       Log::err('Unable to find this question');
     }
+    $this->data['q'] = $qfa;
+    $this->data['lvl'] = Level::findAll();
+    $this->data['lang'] = Lang::findAll();
+    $this->data['a'] = $an;
   }
 }

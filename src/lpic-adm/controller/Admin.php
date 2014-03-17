@@ -31,7 +31,7 @@ class Admin extends Controller
       if ($_POST['bot_action'] == 'restart')
       {
         $cmd = "nohup " . $this->_bot_path . "LPIC_Bot.py &";
-        $ll = system($cmd, $rslt);
+        $ll = passthru($cmd, $rslt);
         Log::inf("L'exécution de la commande à renvoyé le code " . $rslt . ". And last line contain :<br/>" . $ll);
       }
       $this->template('json');
