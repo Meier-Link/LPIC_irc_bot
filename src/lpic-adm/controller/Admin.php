@@ -8,8 +8,8 @@ class Admin extends Controller
   {
     // Check if current user can access to administration section
     if (!$this->isAdmin())
-      $this->action = 'forbidden';
-      //$this->forbidden();
+      $this->forbidden();
+      //$this->action = 'forbidden';
   }
   
   public function home()
