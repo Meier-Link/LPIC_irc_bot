@@ -17,7 +17,7 @@ class User implements Model
   // Attributs
   public function u_id()
   {
-    return $this->u_id;
+    return intval($this->u_id);
   }
   
   public function u_pseudo($value = null)
@@ -51,7 +51,7 @@ class User implements Model
       $this->u_is_manager = $is_manager;
     }
     
-    return $this->u_is_manager;
+    return intval($this->u_is_manager);
   }
   
   public function u_mail($value = null)

@@ -8,6 +8,15 @@ class Manage extends Controller
   public function hook()
   {
     // TODO check if there is an authorized user
+    if(isset($_SESSION['user']) && !is_null($_SESSION['user']))
+    {
+      if(!$this->isAdmin() && $_SESSION['user']->u_is_manager() != 1)
+        $this->forbidden();
+    }
+    else
+    {
+      $this->forbidden();
+    }
   }
 
   public function home()
@@ -24,6 +33,24 @@ class Manage extends Controller
       );
     }
     $this->data['questions'] = $qna;
+  }
+  
+  public function delete()
+  {
+    $this->template('json');
+    if($_POST['q_id'])
+    {
+      $q = Question::findById($_POST['q_id']);
+      if(!is_null($q))
+      {
+        foreach(Answer::findByQuestionId($q->q_id()) as $a)
+        {
+          $a->delete();
+        }
+        $q->delete();
+      }
+      Log::inf('question n°' . $_POST['q_id'] . ' deleted');
+    }
   }
 
   public function edit()
